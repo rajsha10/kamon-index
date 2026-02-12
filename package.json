@@ -1,0 +1,24 @@
+{
+  "name": "n1nj4_insight_api",
+  "version": "1.0.0",
+  "description": "An identity aware API for Injective that transforms wallet activity into reusable trading and reputation intelligence using N1NJ4 NFTs.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "mongoose": "^9.2.1",
+    "node-cron": "^4.2.1",
+    "redis": "^5.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
