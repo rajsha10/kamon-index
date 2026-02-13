@@ -17,7 +17,13 @@
       "Bash(npx tsc:*)",
       "Bash(curl:*)",
       "Bash(python3:*)",
-      "Bash(node -e:*)"
+      "Bash(node -e:*)",
+      "Bash(dir:*)",
+      "Bash(del \"d:\\\\hackathon\\\\N1NJ4_Insight_API\\\\src\\\\services\\\\trust.controller.ts\")",
+      "Bash(npx ts-node:*)",
+      "Bash(python -m json.tool:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)"
     ]
   }
 }

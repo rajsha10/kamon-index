@@ -8,6 +8,7 @@ export interface WalletActivity {
   balanceCount: number;
   stakeCount: number;
   voteCount: number;
+  isNinja: boolean;
 }
 
 export type RiskLevel = "LOW" | "MEDIUM" | "HIGH";

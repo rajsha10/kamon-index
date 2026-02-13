@@ -1,79 +1,54 @@
-import { 
-  IndexerGrpcExplorerApi, 
-  IndexerGrpcSpotApi, 
-  IndexerGrpcDerivativesApi,
-  getEthereumAddress
-} from "@injectivelabs/sdk-ts";
-import { getNetworkEndpoints, Network } from "@injectivelabs/networks";
 import { WalletActivity } from "../types/trust.types";
-
-// 1. Setup Endpoints (Mainnet)
-const endpoints = getNetworkEndpoints(Network.Testnet);
-
-// 2. Initialize Clients (Using gRPC for everything to ensure consistency)
-// We use 'endpoints.indexer' for all of these, reducing configuration errors.
-const explorerApi = new IndexerGrpcExplorerApi(endpoints.indexer);
-const spotApi = new IndexerGrpcSpotApi(endpoints.indexer);
-const derivativesApi = new IndexerGrpcDerivativesApi(endpoints.indexer);
+import { getActivityMetrics } from "./activity.service";
+import { getTradingMetrics } from "./trading.service";
+import { getIdentityMetrics } from "./identity.service";
+import { getStakingMetrics, getGovernanceMetrics } from "./chain.service";
 
 export const fetchWalletActivity = async (wallet: string): Promise<WalletActivity> => {
-  try {
-    // CRITICAL FIX: Convert 'inj1...' address to the default Subaccount ID (Hex)
-    // Injective trades are indexed by this Hex ID, not the bech32 address.
-    const subaccountId = getEthereumAddress(wallet) + "0".repeat(24);
-
-    /* ---------------- 1. TX HISTORY (gRPC) ---------------- */
-    // Fetches transaction history to determine account age and last active time
-    const txsResponse = await explorerApi.fetchAccountTx({
-      address: wallet,
-      limit: 20,
-    });
-    
-    // gRPC returns { txs, pagination }
-    const txs = txsResponse.txs || [];
-
-    /* ---------------- 2. TRADING ACTIVITY ---------------- */
-    // Fetch Spot and Derivative trades using the CORRECT Subaccount ID
-    const [spotTrades, derivTrades] = await Promise.all([
-      spotApi.fetchTrades({ subaccountId }).catch(() => ({ trades: [] })),
-      derivativesApi.fetchTrades({ subaccountId }).catch(() => ({ trades: [] }))
+  // Fetch all metrics in parallel — each service handles its own errors
+  const [activityRes, tradingRes, identityRes, stakingRes, governanceRes] =
+    await Promise.allSettled([
+      getActivityMetrics(wallet),
+      getTradingMetrics(wallet),
+      getIdentityMetrics(wallet),
+      getStakingMetrics(wallet),
+      getGovernanceMetrics(wallet),
     ]);
 
-    const allTrades = [
-      ...(spotTrades.trades || []),
-      ...(derivTrades.trades || [])
-    ];
+  const activity = activityRes.status === "fulfilled"
+    ? activityRes.value
+    : (console.error("Activity Error:", (activityRes as PromiseRejectedResult).reason),
+       { txCount: 0, lastActive: null, createdAt: null });
 
-    /* ---------------- 3. ANALYTICS ---------------- */
-    const markets = [
-      ...new Set(allTrades.map((t: any) => t.marketId))
-    ];
+  const trading = tradingRes.status === "fulfilled"
+    ? tradingRes.value
+    : (console.error("Trading Error:", (tradingRes as PromiseRejectedResult).reason),
+       { tradeCount: 0, markets: [] as string[] });
 
-    // Safe timestamp extraction (gRPC uses 'blockTimestamp')
-    const lastActive = txs.length > 0 ? new Date(txs[0].blockTimestamp).toISOString() : null;
-    const createdAt = txs.length > 0 ? new Date(txs[txs.length - 1].blockTimestamp).toISOString() : null;
+  const identity = identityRes.status === "fulfilled"
+    ? identityRes.value
+    : (console.error("Identity Error:", (identityRes as PromiseRejectedResult).reason),
+       { isNinja: false, balanceCount: 0 });
 
-    return {
-      txCount: txs.length,
-      tradeCount: allTrades.length,
-      lastActive,
-      createdAt,
-      markets,
-      balanceCount: 0,
-      stakeCount: 0,
-      voteCount: 0,
-    };
-  } catch (err: any) {
-    console.error("SDK Fetch Error:", err.message || err);
-    return {
-      txCount: 0,
-      tradeCount: 0,
-      lastActive: null,
-      createdAt: null,
-      markets: [],
-      balanceCount: 0,
-      stakeCount: 0,
-      voteCount: 0,
-    };
-  }
+  const staking = stakingRes.status === "fulfilled"
+    ? stakingRes.value
+    : (console.error("Staking Error:", (stakingRes as PromiseRejectedResult).reason),
+       { stakeCount: 0 });
+
+  const governance = governanceRes.status === "fulfilled"
+    ? governanceRes.value
+    : (console.error("Governance Error:", (governanceRes as PromiseRejectedResult).reason),
+       { voteCount: 0 });
+
+  return {
+    txCount: activity.txCount,
+    tradeCount: trading.tradeCount,
+    lastActive: activity.lastActive,
+    createdAt: activity.createdAt,
+    markets: trading.markets,
+    balanceCount: identity.balanceCount,
+    stakeCount: staking.stakeCount,
+    voteCount: governance.voteCount,
+    isNinja: identity.isNinja,
+  };
 };

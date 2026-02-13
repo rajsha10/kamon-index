@@ -9,4 +9,5 @@ export const ENV = {
   INJECTIVE_LCD_URL: process.env.INJECTIVE_LCD_URL || "",
   INJECTIVE_INDEXER_URL: process.env.INJECTIVE_INDEXER_URL || "",
   INJECTIVE_EXPLORER_URL: process.env.INJECTIVE_EXPLORER_URL || "",
+  NETWORK: (process.env.NETWORK || "mainnet") as any,
 };
