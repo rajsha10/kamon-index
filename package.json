@@ -2,23 +2,38 @@
   "name": "n1nj4_insight_api",
   "version": "1.0.0",
   "description": "An identity aware API for Injective that transforms wallet activity into reusable trading and reputation intelligence using N1NJ4 NFTs.",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "dev": "nodemon --exec ts-node src/server.ts",
+    "start": "node dist/server.js",
+    "seed": "ts-node scripts/seed.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@injectivelabs/networks": "^1.17.6",
+    "@injectivelabs/sdk-ts": "^1.17.6",
+    "axios": "^1.13.5",
     "cors": "^2.8.6",
     "dotenv": "^17.2.4",
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.2.1",
     "node-cron": "^4.2.1",
     "redis": "^5.10.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "@types/axios": "^0.9.36",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^25.2.3",
+    "@types/node-cron": "^3.0.11",
+    "nodemon": "^3.1.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }
