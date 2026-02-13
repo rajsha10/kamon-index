@@ -18,8 +18,6 @@ export const getStakingMetrics = async (address: string) => {
 
 export const getGovernanceMetrics = async (address: string) => {
   try {
-    // Use LCD REST API to query proposals the wallet voted on
-    // This is much more efficient than iterating all proposals
     const res = await axios.get<{ proposals?: unknown[] }>(
       `${endpoints.rest}/cosmos/gov/v1/proposals`,
       { params: { voter: address, "pagination.limit": 100 }, timeout: 10000 }

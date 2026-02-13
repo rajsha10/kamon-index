@@ -5,7 +5,7 @@ import { getNetworkEndpoints, Network } from "@injectivelabs/networks";
 const endpoints = getNetworkEndpoints(Network.MainnetSentry);
 
 export const getActivityMetrics = async (address: string) => {
-  // Fetch the most recent tx (limit 1) to get lastActive + total count from pagination
+  //to get lastActive + total count from pagination
   const recent = await explorerApi.fetchAccountTx({
     address,
     limit: 1,
@@ -14,7 +14,7 @@ export const getActivityMetrics = async (address: string) => {
   const recentTxs = recent.txs || [];
   const totalTxCount = (recent.pagination as any)?.total ?? recentTxs.length;
 
-  // Fetch the oldest tx via REST explorer (skip to the last page)
+  //the oldest tx
   let createdAt: string | null = null;
   if (totalTxCount > 1) {
     try {
@@ -27,7 +27,7 @@ export const getActivityMetrics = async (address: string) => {
         createdAt = new Date(oldest[0].block_timestamp).toISOString();
       }
     } catch {
-      // Fallback: just mark as unknown
+      console.log(`Failed to fetch oldest tx for ${address}, skipping createdAt`);
     }
   }
 

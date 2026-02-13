@@ -7,7 +7,7 @@ const stringify = (obj: unknown): string =>
 const endpoints = getNetworkEndpoints(Network.Mainnet);
 const explorerApi = new IndexerGrpcExplorerApi(endpoints.explorer!);
 
-const validatorAddress = "inj1h754kd0rhdkcpsg9rqnpuxmwgrppscq5vlh2j6"; // <-- Replace with your validator address
+const validatorAddress = "inj...";
 
 async function main() {
   try {

@@ -10,4 +10,5 @@ export const ENV = {
   INJECTIVE_INDEXER_URL: process.env.INJECTIVE_INDEXER_URL || "",
   INJECTIVE_EXPLORER_URL: process.env.INJECTIVE_EXPLORER_URL || "",
   NETWORK: (process.env.NETWORK || "mainnet") as any,
+  DEBUG_MODE: process.env.DEBUG_MODE === "true",
 };

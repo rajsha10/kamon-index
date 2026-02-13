@@ -4,7 +4,6 @@ import { ChainGrpcBankApi } from "@injectivelabs/sdk-ts";
 const stringify = (obj: unknown): string =>
   JSON.stringify(obj, (_: string, v: unknown) => (typeof v === "bigint" ? v.toString() : v), 2);
 
-// Use MainnetSentry to match injective.service.ts
 const endpoints = getNetworkEndpoints(Network.MainnetSentry);
 const bankApi = new ChainGrpcBankApi(endpoints.grpc);
 
@@ -20,7 +19,6 @@ async function main() {
     console.log(stringify(balances));
     console.log(`\nTotal denoms held: ${balances.length}`);
 
-    // N1NJ4 Verified Cyber Identity check — same logic as n1nj4.service.ts
     const isNinja = balances.some((b) => b.denom.toLowerCase().includes("n1nj4"));
 
     if (isNinja) {

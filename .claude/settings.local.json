@@ -23,7 +23,10 @@
       "Bash(npx ts-node:*)",
       "Bash(python -m json.tool:*)",
       "Bash(netstat:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(findstr:*)",
+      "Bash(tasklist:*)",
+      "Bash(powershell:*)"
     ]
   }
 }

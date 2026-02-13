@@ -5,7 +5,6 @@ import { getIdentityMetrics } from "./identity.service";
 import { getStakingMetrics, getGovernanceMetrics } from "./chain.service";
 
 export const fetchWalletActivity = async (wallet: string): Promise<WalletActivity> => {
-  // Fetch all metrics in parallel — each service handles its own errors
   const [activityRes, tradingRes, identityRes, stakingRes, governanceRes] =
     await Promise.allSettled([
       getActivityMetrics(wallet),

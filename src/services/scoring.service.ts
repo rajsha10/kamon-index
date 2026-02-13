@@ -9,22 +9,22 @@ export const computeScore = (
 ) => {
   let score = 0;
 
-  /* ---------- Identity ---------- */
+  // Indentity 
   if (isNinja) score += 10;
 
-  /* ---------- Activity ---------- */
+  // Activity 
   score += Math.min(activity.txCount / 5, 20);
 
-  /* ---------- Economic Stake ---------- */
+  //Economic Stake
   score += Math.min(activity.balanceCount * 5, 15);
 
-  /* ---------- Commitment ---------- */
+  //Commitment
   if (activity.stakeCount > 0) score += 15;
 
-  /* ---------- Governance ---------- */
+  //Governance
   if (activity.voteCount > 0) score += 10;
 
-  /* ---------- Age ---------- */
+  //Age
   if (activity.createdAt) {
     const ageDays =
       (Date.now() -
@@ -35,7 +35,6 @@ export const computeScore = (
     if (ageDays > 365) score += 15;
   }
 
-  /* ---------- Bot Heuristic ---------- */
   let botProb = 0.4;
 
   if (activity.txCount > 20) botProb -= 0.1;

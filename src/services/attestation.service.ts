@@ -13,6 +13,5 @@ export interface AttestationPayload {
 }
 
 export const generateAttestation = (payload: AttestationPayload): string => {
-  // Signs the data so other dApps can verify it came from N1NJ4 Shield
   return jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
 };
