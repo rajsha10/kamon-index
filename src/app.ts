@@ -117,6 +117,20 @@ app.get("/", (_req, res) => {
       font-size: 0.85rem;
     }
     .footer a { color: #7b2ff7; text-decoration: none; }
+    .try-api-btn {
+      display: inline-block;
+      margin-top: 1.2rem;
+      padding: 0.7rem 1.8rem;
+      background: linear-gradient(135deg, #00d2ff, #7b2ff7);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .try-api-btn:hover { opacity: 0.85; transform: translateY(-1px); }
     code {
       background: #1a1a2e;
       padding: 0.15rem 0.4rem;
@@ -149,6 +163,8 @@ app.get("/", (_req, res) => {
       <h1>Kamon Index API</h1>
       <p>Trust &amp; Identity Infrastructure for Injective - Sybil-resistant reputation scores powered by on-chain analytics and N1NJ4 identity.</p>
       <span class="badge">Built for Ninja API Forge</span>
+      <br />
+      <a href="https://kamon-client.vercel.app" target="_blank" rel="noopener noreferrer" class="try-api-btn">&#x1F680; Test the API</a>
     </div>
 
     <div class="stats">
